@@ -1,0 +1,82 @@
+---
+import { getCollection, getEntry, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../Layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
+import { Image } from "astro:assets";
+import BlogDummyImage from "../../content/blog_dummy.png";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+type Props = {
+  post: CollectionEntry<"blog">;
+};
+
+let {
+  post,
+  post: {
+    data: { date, isDraft, title, image, ogImage },
+  },
+} = Astro.props;
+const { Content } = await post.render();
+
+if (!ogImage) {
+  ogImage = `https://og.anit.dev/og?title=${title.trim()}&type=blog`;
+}
+// console.table(ogImage);
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={ogImage}
+>
+  <button
+    transition:name="back-button-blog"
+    slot="extra-header"
+    title="go back"
+    type="button"
+    class={`back-button flex items-center w-fit py-1 underline hover:decoration-slate-400 underline-offset-4 duration-200  dark:text-gray-50 text-gray-950 gap-1`}
+  >
+    <Icon name="mdi:arrow-left" height={16} width={16} />back
+  </button>
+  {
+    isDraft && (
+      <blockquote
+        class="my-8 bg-neutral-200/50 py-4 pl-4 dark:bg-neutral-800/60 rounded"
+        role="alert"
+      >
+        This post is a <strong>draft</strong>. If you're reading this, you're
+        probably a cool and trusted person. Please <strong>don't share</strong>{" "}
+        it thank you.
+      </blockquote>
+    )
+  }
+  <h1 transition:name={post.slug + "heading"} class="mt-8">
+    {post.data.title}
+  </h1>
+  <figure class="w-full overflow-hidden">
+    <Image
+      transition:name={post.slug.trim() + "image"}
+      class="object-cover aspect-video rounded"
+      src={!!image ? image : BlogDummyImage}
+      alt={`${title} cover image`}
+    />
+  </figure>
+  <article class="content">
+    <Content />
+  </article>
+  <Icon name="Full Logo" height={90} width={90} class="dark:fill-white" />
+</BaseLayout>
+<script is:inline>
+function goBack() {
+  window.history.back();
+}
+document.querySelector(".back-button")?.addEventListener("click", goBack);
+</script>

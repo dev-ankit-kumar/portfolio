@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../Layouts/BaseLayout.astro";
+import BlogPreview from "../../components/BlogPreview.astro";
+import Icon from "../../components/Icon.astro";
+
+// Get all entries from a collection.
+// Requires the name of the collection as an argument.
+// Example: retrieve `src/content/blog/**`
+const allBlogPosts = (await getCollection("blog"))
+  .sort((a, b) => {
+    if (a.data.date < b.data.date) return 1;
+    if (a.data.date > b.data.date) return -1;
+    else return 0;
+  })
+  .filter((post) => post.data.isDraft != true);
+
+// Get a single entry from a collection.
+// Requires the name of the collection and either
+// the entry `slug` (content collections) or `id` (data collections)
+// Example: retrieve `src/content/authors/grace-hopper.json`
+// const graceHopperProfile = await getEntry('');
+---
+
+<BaseLayout
+  title="Blog • Ankit"
+  description="Ankit's technical blogs and development insights.I write about what I code"
+  image="https://og.anit.dev/og?title=Technical Wrtings&type=blogs"
+>
+  <h1 class="text-2xl mb-6 mt-4 inline-block">read my blogs 👇🏻</h1>
+  {
+    // allBlogPosts.map((post) => {
+    //   return (
+    //     <div class="dark:border-b-gray-800 border-b-gray-300  border-b">
+    //       <h3 transition:name={post.slug} class="text-lg ">
+    //         <a
+    //           class="no-underline hover:text-gray-500 dark:hover:text-gray-400 duration-300"
+    //           href={`/blog/${post.slug}`}
+    //         >
+    //           {post.data.title}
+    //         </a>
+    //       </h3>
+    //       <p>{post.data.description}</p>
+    //       <small>Date: {formattedDate(post.data.date)}</small>
+    //     </div>
+    //   );
+    // })
+    allBlogPosts.map((post) => {
+      return <BlogPreview {...post} />;
+    })
+  }
+</BaseLayout>

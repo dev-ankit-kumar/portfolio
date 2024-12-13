@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import ProjectCard from "../../components/ProjectCard.astro";
+import BaseLayout from "./../../Layouts/BaseLayout.astro";
+import ProjectPreview from "../../components/ProjectPreview.astro";
+import Icon from "../../components/Icon.astro";
+const projects = (await getCollection("projects")).filter(
+  (project) => !project.data.isDraft
+);
+---
+
+<BaseLayout
+  title="Projects • Ankit"
+  description="List of projects made by Ankit Kumar.Showcasing everything I code."
+  image="https://og.anit.dev/og?title=Project Showcase&type=projects"
+>
+  <h1 class="text-2xl mb-6 mt-4 inline-block">my projects</h1>
+  <main>
+    {
+      projects.length === 0 ? (
+        <p>No Projects yet 🚫</p>
+      ) : (
+        projects.map((project) => {
+          return (
+            <ProjectPreview
+              blogLink={"/projects/" + project.slug}
+              ghLink={project.data.ghLink}
+              liveLink={project.data.liveLink}
+              title={project.data.name}
+              desc={project.data.description}
+              image={project.data.image}
+            />
+          );
+        })
+      )
+    }
+  </main>
+</BaseLayout>

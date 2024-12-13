@@ -1,0 +1,42 @@
+---
+import Icon from "./Icon.astro";
+---
+
+<hr class="mt-8 dark:border-neutral-700 border-neutral-300" />
+<footer
+  class="prose dark:prose-invert flex pt-4 pb-1 justify-between text-sm items-center mx-o mt-auto"
+>
+  <div class="logo flex items-center flex-col leading-1">
+    <Icon name="Full Logo" height={50} width={50} class="dark:fill-white" />
+  </div>
+  <div class="links flex gap-3 grow justify-end">
+    <a
+      href="https://github.com/dev-ankit-kumar"
+      title="github"
+      target="_blank"
+      referrerpolicy="no-referrer"
+    >
+      <Icon name="mdi:github" height={18} width={18} />
+    </a>
+    <a
+      href="https://linkedin.com/in/dev-ankit-kumar"
+      title="linkedin"
+      target="_blank"
+      referrerpolicy="no-referrer"
+    >
+      <Icon name="mdi:linkedin" height={18} width={18} />
+    </a>
+   
+    <a
+      href="https://instagram.com/kumar.ankit1835"
+      title="instagram"
+      target="_blank"
+      referrerpolicy="no-referrer"
+    >
+      <Icon name="mdi:instagram" height={18} width={18} />
+    </a>
+    <a href="/sitemap-index.xml" title="sitemap" data-astro-reload>
+      <Icon name="mdi:sitemap" height={18} width={18} />
+    </a>
+  </div>
+</footer>
